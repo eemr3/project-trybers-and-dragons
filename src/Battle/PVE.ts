@@ -12,17 +12,8 @@ class PVE extends Battle {
   }
 
   fight(): number {
-    this._monster.forEach((npc) => {
-      while (this.player.lifePoints > 0 && npc.lifePoints > 0) {
-        this.player.attack(npc);
-        npc.attack(this.player);
-      }
-    });
-
-    // this._monster.forEach((npc) => {
-    //   npc.attack(this._player1);
-    // });
-
+    this._monster.forEach((npc) => this._player1.attack(npc));
+    this._monster.forEach((npc) => npc.attack(this._player1));
     return super.fight();
   }
 }
