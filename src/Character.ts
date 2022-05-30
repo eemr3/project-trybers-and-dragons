@@ -13,7 +13,7 @@ class Character implements Fighter {
   private _archetype: Archetype;
   private _maxLifePoints: number;
   private _dexterity: number;
-
+  
   constructor(name: string) {
     this._race = new Elf(name, 40);
     this._archetype = new Mage('Archimonder');
@@ -53,19 +53,11 @@ class Character implements Fighter {
   }
 
   get energy(): Energy {
-    return { type_: this._energy.type_, amount: this._energy.amount };
+    return { type_: this._energy.type_,
+      amount: this._energy.amount,
+    };
   }
 
-  receiveDamage(attackPoints: number): number {
-    const damage: number = attackPoints - this._defense;
-
-    if (damage > 0) this._lifePoints -= damage;
-    
-    if (this._lifePoints <= 0) this._lifePoints = -1;
-
-    return this._lifePoints;
-  }
-  
   attack(enemy: Fighter | SimpleFighter): void {
     enemy.receiveDamage(this._strength);
   }
@@ -75,13 +67,23 @@ class Character implements Fighter {
     this._strength += getRandomInt(1, 10);
     this._defense += getRandomInt(1, 10);
     this._dexterity += getRandomInt(1, 10);
-
+    
     this._energy.amount = 10;
-
-    if (this._maxLifePoints > this.race.maxLifePoints) {
-      this._maxLifePoints = this.race.maxLifePoints;
+    
+    if (this._maxLifePoints > this._race.maxLifePoints) {
+      this._maxLifePoints = this._race.maxLifePoints;
     }
     this._lifePoints = this._maxLifePoints;
+  }
+
+  receiveDamage(attackPoints: number): number {
+    const damage: number = attackPoints - this._defense;
+
+    if (damage > 0) this._lifePoints -= damage;
+    
+    if (this._lifePoints <= 0) this._lifePoints = -1;
+    
+    return this._lifePoints;
   }
 
   special(enemy: SimpleFighter): void {
